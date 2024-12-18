@@ -1,17 +1,10 @@
-FROM openjdk:17-jdk-slim
-
+FROM gradle:7-jdk17 AS builder
 WORKDIR /app
+COPY . .
+RUN gradle clean build --no-daemon
 
-COPY gradle /app/gradle
-COPY gradlew /app/
-COPY build.gradle /app/
-COPY settings.gradle /app/
-COPY src /app/src
-
-RUN chmod +x gradlew
-
-RUN ./gradlew clean build --no-daemon
-
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "build/libs/CSVUploader-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
