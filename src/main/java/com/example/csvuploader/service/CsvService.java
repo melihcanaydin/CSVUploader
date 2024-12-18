@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.csvuploader.entity.CsvRecord;
 import com.example.csvuploader.repository.CsvRecordRepository;
 import com.example.csvuploader.util.CsvParserUtil;
+import com.example.csvuploader.util.CsvValidator;
 
 import org.slf4j.Logger;
 
@@ -38,13 +39,8 @@ public class CsvService {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             List<CsvRecord> records = CsvParserUtil.parseCsv(reader);
-
-            for (CsvRecord record : records) {
-                if (csvRecordRepository.existsById(record.getCode())) {
-                    logger.error("Duplicate code detected: {}", record.getCode());
-                    throw new IllegalArgumentException("Duplicate code found: " + record.getCode());
-                }
-            }
+            
+            CsvValidator.validateUniqueCodes(records, csvRecordRepository);
 
             csvRecordRepository.saveAll(records);
             logger.info("Successfully saved {} records to the database.", records.size());

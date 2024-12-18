@@ -19,15 +19,16 @@ public class CsvParserUtil {
         try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim())) {
             for (CSVRecord record : csvParser) {
                 CsvRecord csvRecord = new CsvRecord();
-                csvRecord.setSource(record.get("source"));
-                csvRecord.setCodeListCode(record.get("codeListCode"));
-                csvRecord.setCode(record.get("code"));
-                csvRecord.setDisplayValue(record.get("displayValue"));
-                csvRecord.setLongDescription(record.get("longDescription"));
-                csvRecord.setFromDate(dateFormat.parse(record.get("fromDate")));
-                String toDate = record.get("toDate");
+                csvRecord.setSource(record.get(CsvConstants.SOURCE));
+                csvRecord.setCodeListCode(record.get(CsvConstants.CODE_LIST_CODE));
+                csvRecord.setCode(record.get(CsvConstants.CODE));
+                csvRecord.setDisplayValue(record.get(CsvConstants.DISPLAY_VALUE));
+                csvRecord.setLongDescription(record.get(CsvConstants.LONG_DESCRIPTION));
+                csvRecord.setFromDate(dateFormat.parse(record.get(CsvConstants.FROM_DATE)));
+                String toDate = record.get(CsvConstants.TO_DATE);
                 csvRecord.setToDate(toDate.isEmpty() ? null : dateFormat.parse(toDate));
-                csvRecord.setSortingPriority(record.get("sortingPriority").isEmpty() ? null : Double.valueOf(record.get("sortingPriority")));
+                csvRecord.setSortingPriority(record.get(CsvConstants.SORTING_PRIORITY).isEmpty() ? null
+                        : Double.valueOf(record.get(CsvConstants.SORTING_PRIORITY)));
                 records.add(csvRecord);
             }
         }

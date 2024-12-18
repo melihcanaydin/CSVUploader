@@ -1,7 +1,7 @@
-
 package com.example.csvuploader.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +26,20 @@ public class CsvController {
 
     @GetMapping
     public ResponseEntity<List<CsvRecord>> getAllRecords() {
-        return ResponseEntity.ok(csvService.getAllRecords());
+        List<CsvRecord> records = csvService.getAllRecords();
+        if (records.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(records);
     }
 
     @GetMapping("/{code}")
     public ResponseEntity<CsvRecord> getRecordByCode(@PathVariable String code) {
-        return ResponseEntity.ok(csvService.getRecordByCode(code));
+        CsvRecord record = csvService.getRecordByCode(code);
+        if (record == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(record);
     }
 
     @DeleteMapping
