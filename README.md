@@ -56,6 +56,15 @@ CSVUploader is a simple backend application built with Java and Spring Boot that
 
 ---
 
+## Documentation
+- Start the application as described above.
+- Open your browser and navigate to:
+```bash
+   http://localhost:8080/swagger-ui.html
+```
+
+- **I also added POSTMAN COLLECTION to be able to test endpoints easier**
+
 ## API Endpoints
 
 ### 1. **Upload CSV**
