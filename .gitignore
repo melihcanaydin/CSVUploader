@@ -1,0 +1,60 @@
+# Ignore build files
+/build/
+/.gradle/
+target/
+out/
+*.class
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.swp
+*~
+*#
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+*.settings/
+
+# Ignore Maven or Gradle files
+.mvn/
+.gradle/
+!mvnw
+!mvnw.cmd
+*.war
+*.ear
+
+# Ignore environment configuration files
+.env
+*.env
+
+# Ignore test reports and coverage
+test-output/
+*.xml
+*.coverage
+coverage-reports/
+
+# Ignore H2 database files (if applicable)
+*.h2.db
+*.mv.db
+
+# Ignore JAR files
+*.jar
+*.war
+
+# Ignore generated files
+*.generated
+
+# Ignore dependency cache
+/.idea/libraries/

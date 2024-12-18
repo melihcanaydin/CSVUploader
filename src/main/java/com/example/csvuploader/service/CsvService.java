@@ -17,8 +17,8 @@ import jakarta.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CsvService {
@@ -39,7 +39,7 @@ public class CsvService {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             List<CsvRecord> records = CsvParserUtil.parseCsv(reader);
-            
+
             CsvValidator.validateUniqueCodes(records, csvRecordRepository);
 
             csvRecordRepository.saveAll(records);
@@ -51,13 +51,29 @@ public class CsvService {
     }
 
     public List<CsvRecord> getAllRecords() {
-        return new ArrayList<>();
+        logger.info("Fetching all records from the database.");
+        List<CsvRecord> records = csvRecordRepository.findAll();
+        if (records.isEmpty()) {
+            logger.info("No records found in the database.");
+        }
+        return records;
     }
 
     public CsvRecord getRecordByCode(String code) {
-        return null;
+        logger.info("Fetching record with code: {}", code);
+        Optional<CsvRecord> record = csvRecordRepository.findById(code);
+        if (record.isEmpty()) {
+            logger.warn("Record with code {} not found.", code);
+            throw new IllegalArgumentException("Record with code " + code + " not found.");
+        }
+        return record.get();
     }
 
+    @Transactional
     public void deleteAllRecords() {
+        logger.info("Deleting all records from the database.");
+        long count = csvRecordRepository.count();
+        csvRecordRepository.deleteAll();
+        logger.info("Successfully deleted {} records from the database.", count);
     }
 }
